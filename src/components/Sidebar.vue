@@ -26,8 +26,6 @@
           { label: 'Dashboard', path: '/dashboard', icon: 'bi bi-speedometer' },
           { label: 'UI Elements', path: '/ui-elements', icon: 'bi bi-laptop' },
           { label: 'Forms', path: '/forms', icon: 'bi bi-ui-checks' },
-          { label: 'Tables', path: '/tables', icon: 'bi bi-table' },
-          { label: 'Docs', path: '/docs', icon: 'bi bi-code-square' }
         ]
       }
     }
