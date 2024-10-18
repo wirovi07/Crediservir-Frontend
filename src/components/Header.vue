@@ -25,7 +25,7 @@
   export default {
     methods: {
       toggleSidebar() {
-        document.body.classList.toggle('sidebar-mini');
+        document.body.classList.toggle('sidenav-toggled');
       }
     }
   }
