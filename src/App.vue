@@ -1,7 +1,10 @@
 <template>
   <div :class="['app', { 'sidebar-collapsed': !isSidebarVisible }]">
-    <Header @toggle-sidebar="toggleSidebar" />
-    <Sidebar :is-visible="isSidebarVisible" />
+    <!-- Mostrar Header y Sidebar solo si no estamos en la vista de login -->
+    <Header v-if="!isLoginPage" @toggle-sidebar="toggleSidebar" />
+    <Sidebar v-if="!isLoginPage" :is-visible="isSidebarVisible" />
+    
+    <!-- Estructura principal -->
     <main class="app-content">
       <router-view />
     </main>
@@ -11,23 +14,30 @@
 <script>
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default {
   components: {
     Header,
-    Sidebar
+    Sidebar,
   },
   data() {
     return {
-      isSidebarVisible: true // Estado inicial, el sidebar está visible
+      isSidebarVisible: true, // Estado inicial, el sidebar está visible
     };
   },
   methods: {
     toggleSidebar() {
       this.isSidebarVisible = !this.isSidebarVisible; // Cambia la visibilidad del sidebar
-    }
-  }
-}
+    },
+  },
+  setup() {
+    const route = useRoute(); // Obtener la ruta actual
+    const isLoginPage = computed(() => route.path === '/login'); // Comprobar si estamos en la ruta de login
+    return { isLoginPage };
+  },
+};
 </script>
 
 <style>
@@ -41,6 +51,7 @@ export default {
   width: 100%;
 }
 
+/* Cuando el sidebar está colapsado, se ajusta el margen */
 .sidebar-collapsed .app-content {
   margin-left: 0;
 }
