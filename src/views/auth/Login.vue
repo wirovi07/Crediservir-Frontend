@@ -1,55 +1,61 @@
 <template>
     <div>
+        <!-- Sección superior con fondo -->
         <section class="material-half-bg">
             <div class="cover"></div>
         </section>
-        <section class="login-content">
+
+        <!-- Contenido principal del login -->
+        <section class="content">
             <div class="logo">
-                <h1>Vali</h1>
+                <h1 style="text-align: center; color: white; text-align: center;">Crediservir</h1>
             </div>
+
             <div class="login-box">
-                <!-- Login Form -->
+                <!-- Formulario de login -->
                 <form class="login-form" @submit.prevent="login">
                     <h3 class="login-head"><i class="bi bi-person me-2"></i>SIGN IN</h3>
+
                     <div class="mb-3">
                         <label class="form-label">USERNAME</label>
-                        <input class="form-control" type="text" v-model="username" placeholder="Email" autofocus>
+                        <input class="form-control" type="text" v-model="username" placeholder="Email" autofocus />
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">PASSWORD</label>
-                        <input class="form-control" type="password" v-model="password" placeholder="Password">
+                        <input class="form-control" type="password" v-model="password" placeholder="Password" />
                     </div>
+
                     <div class="mb-3">
-                        <div class="utility">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" v-model="staySignedIn">
-                                <label class="form-check-label">
-                                    <span class="label-text">Stay Signed in</span>
-                                </label>
-                            </div>
-                            <p class="semibold-text mb-2">
-                                <a href="#" @click="toggleForm">Forgot Password?</a>
+                        <div class="utility d-flex">
+                            <p class="semibold-text mb-2 ms-auto">
+                                <a href="#" @click.prevent="goToRegister">Register?</a>
                             </p>
                         </div>
                     </div>
+
                     <div class="mb-3 btn-container d-grid">
                         <button class="btn btn-primary btn-block">
                             <i class="bi bi-box-arrow-in-right me-2 fs-5"></i>SIGN IN
                         </button>
                     </div>
                 </form>
-                <!-- Forgot Password Form -->
+
+                <!-- Formulario de "Forgot Password" -->
                 <form class="forget-form" v-if="showForgotPassword" @submit.prevent="resetPassword">
                     <h3 class="login-head"><i class="bi bi-person-lock me-2"></i>Forgot Password?</h3>
+
                     <div class="mb-3">
                         <label class="form-label">EMAIL</label>
-                        <input class="form-control" type="text" v-model="email" placeholder="Email">
+                        <input class="form-control" type="text" v-model="email" placeholder="Email" />
                     </div>
+
                     <div class="mb-3 btn-container d-grid">
                         <button class="btn btn-primary btn-block">
                             <i class="bi bi-unlock me-2 fs-5"></i>RESET
                         </button>
                     </div>
+
                     <div class="mb-3 mt-3">
                         <p class="semibold-text mb-0">
                             <a href="#" @click="toggleForm"><i class="bi bi-chevron-left me-1"></i> Back to Login</a>
@@ -73,8 +79,8 @@ export default {
         };
     },
     methods: {
-        toggleForm() {
-            this.showForgotPassword = !this.showForgotPassword;
+        goToRegister() {
+            this.$router.push({ name: 'Register' }); // Redirige a la vista de registro
         },
         login() {
             // Lógica para iniciar sesión
@@ -105,7 +111,6 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /* Altura completa de la vista */
 }
 
 .logo {
@@ -122,9 +127,39 @@ export default {
 
 .login-head {
     margin-bottom: 20px;
+    font-weight: bold;
+    color: #343a40;
+    text-align: center;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-check-label {
+    color: #495057;
 }
 
 .btn-container {
     margin-top: 20px;
+}
+
+.utility {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.semibold-text {
+    font-weight: 600;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 </style>

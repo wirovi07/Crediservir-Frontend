@@ -1,58 +1,41 @@
 <template>
-  <div :class="['app', { 'sidebar-collapsed': !isSidebarVisible }]">
-    <!-- Mostrar Header y Sidebar solo si no estamos en la vista de login -->
-    <Header v-if="!isLoginPage" @toggle-sidebar="toggleSidebar" />
-    <Sidebar v-if="!isLoginPage" :is-visible="isSidebarVisible" />
-    
-    <!-- Estructura principal -->
-    <main class="app-content">
-      <router-view />
-    </main>
+  <div>
+    <!-- Usar el layout correcto basado en la ruta -->
+    <component :is="layout"></component>
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue';
-import Sidebar from './components/Sidebar.vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import appLayout from './layouts/app-layout.vue';
+import loginLayout from './layouts/login-layout.vue'; // El layout del login (sin Header ni Sidebar)
+import registerLayout from './layouts/register-layout.vue';
 
 export default {
   components: {
-    Header,
-    Sidebar,
-  },
-  data() {
-    return {
-      isSidebarVisible: true, // Estado inicial, el sidebar está visible
-    };
-  },
-  methods: {
-    toggleSidebar() {
-      this.isSidebarVisible = !this.isSidebarVisible; // Cambia la visibilidad del sidebar
-    },
+    appLayout,
+    loginLayout,
+    registerLayout
   },
   setup() {
-    const route = useRoute(); // Obtener la ruta actual
-    const isLoginPage = computed(() => route.path === '/login'); // Comprobar si estamos en la ruta de login
-    return { isLoginPage };
+    const route = useRoute();
+
+    // Definir el layout en función de la ruta
+    const layout = computed(() => {
+      // Si estamos en la ruta de login, usamos el layout de login
+      if (route.path === '/login') {
+        return 'loginLayout';
+      }
+      // Si estamos en la ruta de registro, usamos el layout de registro
+      else if (route.path === '/register') {
+        return 'registerLayout';
+      }
+      // Para las demás rutas, usamos el layout general
+      return 'appLayout';
+    });
+
+    return { layout };
   },
 };
 </script>
-
-<style>
-/* Estilos generales para el comportamiento del sidebar */
-.app {
-  display: flex;
-}
-
-.app-content {
-  transition: margin-left 0.3s ease;
-  width: 100%;
-}
-
-/* Cuando el sidebar está colapsado, se ajusta el margen */
-.sidebar-collapsed .app-content {
-  margin-left: 0;
-}
-</style>
