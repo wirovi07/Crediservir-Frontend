@@ -8,10 +8,10 @@
         <!-- Contenido principal del registro -->
         <section class="content">
             <div class="logo">
-                <h1 style="text-align: center; color: white;">Crediservir</h1>
+                <h1 style="text-align: center; color: white; text-align: center;">Crediservir</h1>
             </div>
 
-            <div class="login-box container">
+            <div class="login-box">
                 <!-- Formulario de registro -->
                 <form @submit.prevent="register">
                     <h3 class="login-head">
@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    <!-- Quinta fila (Contraseña) -->
+                    <!-- Quinta fila (Contraseña y Confirmar Contraseña) -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">PASSWORD</label>
@@ -78,7 +78,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">CONFIRM PASSWORD</label>
-                            <input class="form-control" type="password" v-model="password" placeholder="Password" />
+                            <input class="form-control" type="password" v-model="confirmPassword"
+                                placeholder="Confirm Password" />
                         </div>
                     </div>
 
@@ -101,40 +102,69 @@
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            type_document: '',
-            document: '',
-            firts_name: '',
-            last_name: '',
-            sex: '',
-            phone: '',
-            address: '',
-            email: '',
-            password: ''
-        };
-    },
-    methods: {
-        register() {
-            // Lógica para registrar un usuario
-            console.log('Registering with', {
-                type_document: this.type_document,
-                document: this.document,
-                firts_name: this.firts_name,
-                last_name: this.last_name,
-                sex: this.sex,
-                phone: this.phone,
-                address: this.address,
-                email: this.email,
-                password: this.password
-            });
-        },
-        goToLogin() {
-            this.$router.push({ name: 'Login' });
-        }
-    }
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { useMeta } from '../../composables/use-meta';
+useMeta({ title: 'Register' });
+const router = useRouter();
+
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
+const type_document = ref('');
+const document = ref('');
+const firts_name = ref('');
+const last_name = ref('');
+const sex = ref('');
+const phone = ref('');
+const address = ref('');
+const email = ref('');
+const password = ref('');
+
+const formData = ref({
+    type_document: '',
+    document: '',
+    firts_name: '',
+    last_name: '',
+    sex: '',
+    phone: '',
+    address: '',
+    email: '',
+    password: '',
+    confir_password: ''
+})
+
+const errors = ref({
+    type_document: [],
+    document: [],
+    firts_name: [],
+    last_name: [],
+    sex: [],
+    phone: [],
+    address: [],
+    email: [],
+    password: [],
+    confir_password: []
+})
+
+const register = () => {
+    console.log('Registering with', {
+        type_document: type_document.value,
+        document: document.value,
+        firts_name: firts_name.value,
+        last_name: last_name.value,
+        sex: sex.value,
+        phone: phone.value,
+        address: address.value,
+        email: email.value,
+        password: password.value,
+    });
+};
+
+const goToLogin = () => {
+    router.push({ name: 'Login' });
 };
 </script>
 
@@ -149,22 +179,14 @@ export default {
     height: 100%;
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
 .logo {
     margin-bottom: 20px;
 }
 
 .login-box {
-    width: 600px; /* Aumentar el ancho del contenedor */
+    width: 400px;
     background-color: #fff;
-    padding: 30px; /* Aumentar el padding para que sea más espacioso */
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
