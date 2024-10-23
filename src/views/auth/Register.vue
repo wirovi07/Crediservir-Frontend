@@ -164,16 +164,6 @@ const router = useRouter();
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const type_document = ref('');
-const document = ref('');
-const firts_name = ref('');
-const last_name = ref('');
-const sex = ref('');
-const phone = ref('');
-const address = ref('');
-const email = ref('');
-const password = ref('');
-
 const formData = ref({
     type_document: '',
     document: '',
@@ -198,20 +188,35 @@ const errors = ref({
     email: [],
     password: [],
     password_confirmed: []
-})
+});
 
-const register = () => {
-    console.log('Registering with', {
-        type_document: type_document.value,
-        document: document.value,
-        firts_name: firts_name.value,
-        last_name: last_name.value,
-        sex: sex.value,
-        phone: phone.value,
-        address: address.value,
-        email: email.value,
-        password: password.value,
-    });
+const errorsClear = () =>{
+    errors.value = {
+        type_document: [],
+        document: [],
+        firts_name: [],
+        last_name: [],
+        sex: [],
+        phone: [],
+        address: [],
+        email: [],
+        password: [],
+        password_confirmed: []
+    }
+}
+
+const register = async() => {
+    errorsClear()
+
+    let has_error = false;
+    Object.entries(formData.value).forEach(f => {
+        const elemento = f[0];
+        const value = f[1];
+        if (value === '') {
+            has_error = true;
+            errors.value[elemento] = "Este campo es obli"
+        }
+    })
 };
 
 const goToLogin = () => {
