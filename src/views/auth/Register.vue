@@ -22,12 +22,22 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">TYPE DOCUMENT</label>
-                            <input class="form-control" type="text" v-model="type_document"
+                            <input class="form-control" type="text" v-model="formData.type_document"
                                 placeholder="Type of Document" autofocus />
+                            <template v-if="errors.type_document.length > 0">
+                                <b :key="e" v-for="e in errors.type_document" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">DOCUMENT</label>
-                            <input class="form-control" type="text" v-model="document" placeholder="Document Number" />
+                            <input class="form-control" type="text" v-model="formData.document" placeholder="Document Number" />
+                            <template v-if="errors.document.length > 0">
+                                <b :key="e" v-for="e in errors.document" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                     </div>
 
@@ -35,11 +45,21 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">FIRST NAME</label>
-                            <input class="form-control" type="text" v-model="firts_name" placeholder="First Name" />
+                            <input class="form-control" type="text" v-model="formData.firts_name" placeholder="First Name" />
+                            <template v-if="errors.firts_name.length > 0">
+                                <b :key="e" v-for="e in errors.firts_name" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">LAST NAME</label>
-                            <input class="form-control" type="text" v-model="last_name" placeholder="Last Name" />
+                            <input class="form-control" type="text" v-model="formData.last_name" placeholder="Last Name" />
+                            <template v-if="errors.last_name.length > 0">
+                                <b :key="e" v-for="e in errors.last_name" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                     </div>
 
@@ -47,14 +67,25 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">SEX</label>
-                            <select class="form-control" v-model="sex">
+                            <select v-model="formData.sex" class="form-control">
+                                <option style="margin: 1px" value="" disabled selected>SEX</option>
                                 <option value="male">Mascul</option>
                                 <option value="female">Female</option>
                             </select>
+                            <template v-if="errors.sex.length > 0">
+                                <b :key="e" v-for="e in errors.sex" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">PHONE</label>
-                            <input class="form-control" type="text" v-model="phone" placeholder="Phone Number" />
+                            <input class="form-control" type="text" v-model="formData.phone" placeholder="Phone Number" />  
+                            <template v-if="errors.phone.length > 0">
+                                <b :key="e" v-for="e in errors.phone" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                     </div>
 
@@ -62,11 +93,21 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">ADDRESS</label>
-                            <input class="form-control" type="text" v-model="address" placeholder="Address" />
+                            <input class="form-control" type="text" v-model="formData.address" placeholder="Address" />
+                            <template v-if="errors.address.length > 0">
+                                <b :key="e" v-for="e in errors.address" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">EMAIL</label>
-                            <input class="form-control" type="email" v-model="email" placeholder="Email" />
+                            <input class="form-control" type="email" v-model="formData.email" placeholder="Email" />
+                            <template v-if="errors.email.length > 0">
+                                <b :key="e" v-for="e in errors.email" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                     </div>
 
@@ -74,12 +115,22 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">PASSWORD</label>
-                            <input class="form-control" type="password" v-model="password" placeholder="Password" />
+                            <input class="form-control" type="password" v-model="formData.password" placeholder="Password" />
+                            <template v-if="errors.password.length > 0">
+                                <b :key="e" v-for="e in errors.password" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">CONFIRM PASSWORD</label>
-                            <input class="form-control" type="password" v-model="confirmPassword"
+                            <input class="form-control" type="password" v-model="formData.password_confirmed"
                                 placeholder="Confirm Password" />
+                            <template v-if="errors.password_confirmed.length > 0">
+                                <b :key="e" v-for="e in errors.password_confirmed" class="text-danger">
+                                    {{ e }}
+                                </b>
+                            </template>
                         </div>
                     </div>
 
@@ -133,7 +184,7 @@ const formData = ref({
     address: '',
     email: '',
     password: '',
-    confir_password: ''
+    password_confirmed: ''
 })
 
 const errors = ref({
@@ -146,7 +197,7 @@ const errors = ref({
     address: [],
     email: [],
     password: [],
-    confir_password: []
+    password_confirmed: []
 })
 
 const register = () => {
