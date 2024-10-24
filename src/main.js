@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router/index.js'; // Corrige la ruta aquí
+import { createHead } from '@vueuse/head';
+import router from './router';
 import './assets/css/main.css';
 import './assets/css/main.min.css';
 import './assets/js/bootstrap.min.js'; // Asegúrate de que el archivo exista
@@ -11,5 +12,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
 const app = createApp(App);
+const head = createHead();
 app.use(router);
+app.use(head);
 app.mount('#app');

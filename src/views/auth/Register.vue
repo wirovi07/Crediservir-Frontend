@@ -22,8 +22,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">TYPE DOCUMENT</label>
-                            <input class="form-control" type="text" v-model="formData.type_document"
-                                placeholder="Type of Document" autofocus />
+                            <select v-model="formData.type_document" class="form-control">
+                                <option style="margin: 1px" value="" disabled selected>TYPE DOCUMENT</option>
+                                <option value="cc">CC</option>
+                                <option value="ex">EX</option>
+                            </select>
                             <template v-if="errors.type_document.length > 0">
                                 <b :key="e" v-for="e in errors.type_document" class="text-danger">
                                     {{ e }}
@@ -32,7 +35,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">DOCUMENT</label>
-                            <input class="form-control" type="text" v-model="formData.document" placeholder="Document Number" />
+                            <input class="form-control" type="number" v-model="formData.document" placeholder="Document Number" />
                             <template v-if="errors.document.length > 0">
                                 <b :key="e" v-for="e in errors.document" class="text-danger">
                                     {{ e }}
@@ -45,9 +48,9 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">FIRST NAME</label>
-                            <input class="form-control" type="text" v-model="formData.firts_name" placeholder="First Name" />
-                            <template v-if="errors.firts_name.length > 0">
-                                <b :key="e" v-for="e in errors.firts_name" class="text-danger">
+                            <input class="form-control" type="text" v-model="formData.first_name" placeholder="First Name" />
+                            <template v-if="errors.first_name.length > 0">
+                                <b :key="e" v-for="e in errors.first_name" class="text-danger">
                                     {{ e }}
                                 </b>
                             </template>
@@ -69,8 +72,8 @@
                             <label class="form-label">SEX</label>
                             <select v-model="formData.sex" class="form-control">
                                 <option style="margin: 1px" value="" disabled selected>SEX</option>
-                                <option value="male">Mascul</option>
-                                <option value="female">Female</option>
+                                <option value="masculino">Mascul</option>
+                                <option value="femenino">Female</option>
                             </select>
                             <template v-if="errors.sex.length > 0">
                                 <b :key="e" v-for="e in errors.sex" class="text-danger">
@@ -80,7 +83,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">PHONE</label>
-                            <input class="form-control" type="text" v-model="formData.phone" placeholder="Phone Number" />  
+                            <input class="form-control" type="number" v-model="formData.phone" placeholder="Phone Number" />  
                             <template v-if="errors.phone.length > 0">
                                 <b :key="e" v-for="e in errors.phone" class="text-danger">
                                     {{ e }}
@@ -124,10 +127,9 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">CONFIRM PASSWORD</label>
-                            <input class="form-control" type="password" v-model="formData.password_confirmed"
-                                placeholder="Confirm Password" />
-                            <template v-if="errors.password_confirmed.length > 0">
-                                <b :key="e" v-for="e in errors.password_confirmed" class="text-danger">
+                            <input class="form-control" type="password" v-model="formData.password_confirmation" placeholder="Confirm Password" />
+                            <template v-if="errors.password_confirmation.length > 0">
+                                <b :key="e" v-for="e in errors.password_confirmation" class="text-danger">
                                     {{ e }}
                                 </b>
                             </template>
@@ -167,46 +169,46 @@ import Swal from 'sweetalert2';
 const formData = ref({
     type_document: '',
     document: '',
-    firts_name: '',
+    first_name: '',
     last_name: '',
     sex: '',
     phone: '',
     address: '',
     email: '',
     password: '',
-    password_confirmed: ''
+    password_confirmation: ''
 })
 
 const errors = ref({
     type_document: [],
     document: [],
-    firts_name: [],
+    first_name: [],
     last_name: [],
     sex: [],
     phone: [],
     address: [],
     email: [],
     password: [],
-    password_confirmed: []
+    password_confirmation: []
 });
 
 const errorsClear = () =>{
     errors.value = {
         type_document: [],
         document: [],
-        firts_name: [],
+        first_name: [],
         last_name: [],
         sex: [],
         phone: [],
         address: [],
         email: [],
         password: [],
-        password_confirmed: []
+        password_confirmation: []
     }
 }
 
 const register = async() => {
-    errorsClear()
+    errorsClear();
 
     let has_error = false;
     Object.entries(formData.value).forEach(f => {
@@ -214,25 +216,25 @@ const register = async() => {
         const value = f[1];
         if (value === '') {
             has_error = true;
-            errors.value[elemento] = "Este campo es obli"
+            errors.value[elemento] = ["Este campo es obligatorio"]; // Asigna un arreglo en lugar de un string
         }
     });
 
-    if(has_error) return;
+    if (has_error) return;
 
-    try{
+    try {
         await axios.post('http://crediservir.test/api/register', formData.value);
 
         Swal.fire({
-            title: 'Exito!',
-            text: 'Usuario registrado correctamente!',
+            title: '¡Éxito!',
+            text: 'Usuario registrado correctamente',
             icon: 'success',
             confirmButtonText: '¡Entendido!'
         });
 
-        router.push({ name: 'Login' })
-    } catch (error){
-        if(error.response && error.response.data && error.response.data.errors){
+        router.push({ name: 'Login' });
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.errors) {
             const errors_api = error.response.data.errors;
             Object.entries(errors_api).forEach(e => {
                 const elemento = e[0];
@@ -240,10 +242,11 @@ const register = async() => {
                 errors.value[elemento] = mensaje;
             });
         } else {
-            alert("server error")
+            alert("Error del servidor");
         }
     }
 };
+
 
 const goToLogin = () => {
     router.push({ name: 'Login' });

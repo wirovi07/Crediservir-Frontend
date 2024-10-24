@@ -18,12 +18,12 @@
 
                     <div class="mb-3">
                         <label class="form-label">USERNAME</label>
-                        <input class="form-control" type="text" v-model="username" placeholder="Email" autofocus />
+                        <input class="form-control" type="email" v-model="formData.email" placeholder="Email" autofocus />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">PASSWORD</label>
-                        <input class="form-control" type="password" v-model="password" placeholder="Password" />
+                        <input class="form-control" type="password" v-model="formData.password" placeholder="Password" />
                     </div>
 
                     <div class="mb-3">
@@ -40,58 +40,78 @@
                         </button>
                     </div>
                 </form>
-
-                <!-- Formulario de "Forgot Password" -->
-                <form class="forget-form" v-if="showForgotPassword" @submit.prevent="resetPassword">
-                    <h3 class="login-head"><i class="bi bi-person-lock me-2"></i>Forgot Password?</h3>
-
-                    <div class="mb-3">
-                        <label class="form-label">EMAIL</label>
-                        <input class="form-control" type="text" v-model="email" placeholder="Email" />
-                    </div>
-
-                    <div class="mb-3 btn-container d-grid">
-                        <button class="btn btn-primary btn-block">
-                            <i class="bi bi-unlock me-2 fs-5"></i>RESET
-                        </button>
-                    </div>
-
-                    <div class="mb-3 mt-3">
-                        <p class="semibold-text mb-0">
-                            <a href="#" @click="toggleForm"><i class="bi bi-chevron-left me-1"></i> Back to Login</a>
-                        </p>
-                    </div>
-                </form>
             </div>
         </section>
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-            staySignedIn: false,
-            showForgotPassword: false,
-            email: ''
-        };
-    },
-    methods: {
-        goToRegister() {
-            this.$router.push({ name: 'Register' }); // Redirige a la vista de registro
-        },
-        login() {
-            // Lógica para iniciar sesión
-            console.log('Logging in with', this.username, this.password);
-        },
-        resetPassword() {
-            // Lógica para resetear la contraseña
-            console.log('Resetting password for', this.email);
+<script setup>
+
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
+import { useMeta } from '../../composables/use-meta';
+import { useApi } from '../../composables/use-api';
+import axios from 'axios';
+
+
+const router = useRouter();
+
+useMeta({ title: 'Login' });
+
+const formData = ref({
+    email: 'wilmar@example.com',
+    password: '12345678',
+});
+
+const login = async (event) => {
+    event.preventDefault();
+
+    if (!formData.value.email || !formData.value.password) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Debe llenar todos los campos',
+            icon: 'error',
+            confirmButtonText: '¡Entendido!'
+        });
+        return;
+    }
+
+    try {
+        const data = await useApi('login', 'POST', formData.value);
+
+        // Verifica si el token existe en la respuesta
+        const token = data.access_token;
+        if (!token) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'No se recibió un token válido. Por favor, inténtelo de nuevo.',
+                icon: 'error',
+                confirmButtonText: '¡Entendido!'
+            });
+            return;
         }
+
+        // Si el token es válido, almacenarlo en localStorage
+        localStorage.setItem('token', token);
+
+        // Redirigir al dashboard
+        router.push({ name: 'Dashboard' });
+
+    } catch (error) {
+        Swal.fire({
+            title: 'Error!',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: '¡Entendido!'
+        });
     }
 };
+
+const goToRegister = () => {
+    router.push({ name: 'Register' });
+};
+
 </script>
 
 <style scoped>

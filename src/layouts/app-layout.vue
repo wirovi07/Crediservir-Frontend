@@ -1,10 +1,10 @@
 <template>
     <div>
         <!--  BEGIN NAVBAR  -->
-        <Header v-if="!isLoginPage" @toggle-sidebar="toggleSidebar"></Header>
+        <Header @toggle-sidebar="toggleSidebar"></Header>
         <!--  END NAVBAR  -->
 
-        <Sidebar v-if="!isLoginPage" :is-visible="isSidebarVisible"></Sidebar>
+        <Sidebar :is-visible="isSidebarVisible"></Sidebar>
         <!--  END SIDEBAR  -->
 
         <!--  BEGIN CONTENT AREA  -->
@@ -18,12 +18,25 @@
 <script setup>
 import Header from "../components/layout/Header.vue";
 import Sidebar from "../components/layout/Sidebar.vue";
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+
+// Estado de visibilidad del sidebar
+const isSidebarVisible = ref(true);
+
+// Función para alternar la visibilidad del sidebar
+const toggleSidebar = () => {
+    isSidebarVisible.value = !isSidebarVisible.value;
+};
 
 // Comprobar si estamos en la página de login
 const route = useRoute();
 const isLoginPage = computed(() => route.path === '/login');
+
+// Ocultar el sidebar si estamos en la página de login
+if (isLoginPage.value) {
+    isSidebarVisible.value = false;
+}
 </script>
 
 <style scoped>

@@ -6,10 +6,14 @@ import Login from '../views/auth/Login.vue'
 import Register from '../views/auth/Register.vue';
 
 const routes = [
-  { path: '/dashboard', component: Dashboard },
+  { 
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard 
+  },
   { path: '/ui-elements', component: UIElements },
   { path: '/forms', component: Forms },
-  { path: '/', redirect: '/dashboard' },
+  // { path: '/', redirect: '/dashboard' },
   {
     path: '/login',
     name: 'Login',
