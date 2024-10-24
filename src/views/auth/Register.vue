@@ -216,7 +216,33 @@ const register = async() => {
             has_error = true;
             errors.value[elemento] = "Este campo es obli"
         }
-    })
+    });
+
+    if(has_error) return;
+
+    try{
+        await axios.post('http://crediservir.test/api/register', formData.value);
+
+        Swal.fire({
+            title: 'Exito!',
+            text: 'Usuario registrado correctamente!',
+            icon: 'success',
+            confirmButtonText: '¡Entendido!'
+        });
+
+        router.push({ name: 'Login' })
+    } catch (error){
+        if(error.response && error.response.data && error.response.data.errors){
+            const errors_api = error.response.data.errors;
+            Object.entries(errors_api).forEach(e => {
+                const elemento = e[0];
+                const mensaje = e[1];
+                errors.value[elemento] = mensaje;
+            });
+        } else {
+            alert("server error")
+        }
+    }
 };
 
 const goToLogin = () => {
