@@ -24,7 +24,7 @@
       return {
         menuItems: [
           { label: 'Dashboard', path: '/dashboard', icon: 'bi bi-speedometer' },
-          { label: 'UI Elements', path: '/ui-elements', icon: 'bi bi-laptop' },
+          { label: 'Assistant', path: '/assistant', icon: 'bi bi-laptop' },
           { label: 'Forms', path: '/forms', icon: 'bi bi-ui-checks' },
         ]
       }

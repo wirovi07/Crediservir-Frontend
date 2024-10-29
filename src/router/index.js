@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
-import UIElements from '../views/UIElements.vue';
-import Forms from '../views/Forms.vue';
 import Login from '../views/auth/Login.vue'
 import Register from '../views/auth/Register.vue';
+import Assistant from '../views/Assistant.vue';
 
 const routes = [
   { 
@@ -11,9 +10,10 @@ const routes = [
     name: 'Dashboard',
     component: Dashboard 
   },
-  { path: '/ui-elements', component: UIElements },
-  { path: '/forms', component: Forms },
-  // { path: '/', redirect: '/dashboard' },
+  { path: '/assistant',
+    name: 'Assistant',
+    component: Assistant 
+  },
   {
     path: '/login',
     name: 'Login',
