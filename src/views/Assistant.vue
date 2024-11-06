@@ -1,4 +1,73 @@
 <template>
+  <!-- Botón para abrir el modal -->
+  <button class="btn btn-primary my-3" @click="showModal = true">Agregar Asistente</button>
+
+  <!-- Modal para ingresar los datos -->
+  <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Nuevo Asistente</h5>
+          <button type="button" class="btn-close" @click="showModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="first_name" class="form-label">Nombres</label>
+              <input v-model="formData.first_name" type="text" class="form-control" id="first_name">
+              <template v-if="errors.first_name.length > 0">
+                <b :key="e" v-for="e in errors.first_name" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="last_name" class="form-label">Apellidos</label>
+              <input v-model="formData.last_name" type="text" class="form-control" id="last_name">
+              <template v-if="errors.last_name.length > 0">
+                <b :key="e" v-for="e in errors.last_name" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="birthdate" class="form-label">Fecha de Nacimiento</label>
+              <input v-model="formData.birthdate" type="date" class="form-control" id="birthdate">
+              <template v-if="errors.birthdate.length > 0">
+                <b :key="e" v-for="e in errors.birthdate" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Correo</label>
+              <input v-model="formData.email" type="email" class="form-control" id="email">
+              <template v-if="errors.email.length > 0">
+                <b :key="e" v-for="e in errors.email" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="phone" class="form-label">Teléfono</label>
+              <input v-model="formData.phone" type="text" class="form-control" id="phone">
+              <template v-if="errors.phone.length > 0">
+                <b :key="e" v-for="e in errors.phone" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
+          <button type="button" class="btn btn-primary" @click="saveAssistant">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de asistentes -->
   <div class="row">
     <div class="col-md-12">
       <div class="tile">
@@ -37,8 +106,46 @@
 <script setup>
 import { onMounted, ref, nextTick } from 'vue';
 import { useApi } from '../composables/use-api';
+import Swal from 'sweetalert2';
 
-const tableData = ref([])
+const showModal = ref(false); // Controla la visibilidad del modal
+const tableData = ref([]);
+
+const formData = ref({
+  first_name: '',
+  last_name: '',
+  birthdate: '',
+  email: '',
+  phone: ''
+});
+
+const errors = ref({
+  first_name: [],
+  last_name: [],
+  birthdate: [],
+  email: [],
+  phone: []
+})
+
+const errorsClear = () => {
+  errors.value = {
+    first_name: [],
+    last_name: [],
+    birthdate: [],
+    email: [],
+    phone: []
+  }
+}
+
+const resetFormData = () => {
+  formData.value = {
+    first_name: '',
+    last_name: '',
+    birthdate: '',
+    email: '',
+    phone: ''
+  }
+}
 
 const dataTableApi = async () => {
   try {
@@ -56,7 +163,58 @@ const dataTableApi = async () => {
   } catch (error) {
     console.error('Error fetching data from API:', error);
   }
+};
+
+// Función para guardar el asistente
+const saveAssistant = async () => {
+  errorsClear()
+
+  let has_error = false;
+  Object.entries(formData.value).forEach(f => {
+    const elemento = f[0]
+    const value = f[1]
+    if (value === '') {
+      has_error = true
+      errors.value[elemento] = "Este campo es obligatorio"
+    }
+  })
+
+  if(has_error){
+    return
+  }
+
+  try {
+    await useApi("assistant", "POST", formData.value)
+    Swal.fire({
+      title: 'Exito',
+      text: 'Asistente agregado con exito',
+      icon: 'success',
+      confirmButtonText: '¡Entendido!'
+    }).then(() => {
+      if(discardButton.value){
+        discardButton.value.click();
+      }
+      resetFormData()
+    })
+  } catch (error) {
+    const errors_api = error.errors
+    Object.entries(errors_api).forEach(e => {
+      const elemento = e[0]
+      const mensaje = e[1]
+      errors.value[elemento] = mensaje
+    })
+  }
+
+  showModal.value = false; // Cierra el modal
+
+  dataTableApi();
 }
 
 onMounted(dataTableApi);
 </script>
+
+<style>
+.modal.fade.show.d-block {
+  display: block;
+}
+</style>
