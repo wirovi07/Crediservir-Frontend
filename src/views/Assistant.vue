@@ -67,6 +67,71 @@
     </div>
   </div>
 
+    <!-- Modal para editar los datos -->
+    <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Asistente</h5>
+            <button type="button" class="btn-close" @click="showModalEdit = false"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="first_name" class="form-label">Nombres</label>
+                <input v-model="formData.first_name" type="text" class="form-control" id="first_name">
+                <template v-if="errors.first_name.length > 0">
+                  <b :key="e" v-for="e in errors.first_name" class="text-danger">
+                      {{ e }}
+                  </b>
+              </template>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="last_name" class="form-label">Apellidos</label>
+                <input v-model="formData.last_name" type="text" class="form-control" id="last_name">
+                <template v-if="errors.last_name.length > 0">
+                  <b :key="e" v-for="e in errors.last_name" class="text-danger">
+                      {{ e }}
+                  </b>
+              </template>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="birthdate" class="form-label">Fecha de Nacimiento</label>
+                <input v-model="formData.birthdate" type="date" class="form-control" id="birthdate">
+                <template v-if="errors.birthdate.length > 0">
+                  <b :key="e" v-for="e in errors.birthdate" class="text-danger">
+                      {{ e }}
+                  </b>
+              </template>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Correo</label>
+                <input v-model="formData.email" type="email" class="form-control" id="email">
+                <template v-if="errors.email.length > 0">
+                  <b :key="e" v-for="e in errors.email" class="text-danger">
+                      {{ e }}
+                  </b>
+              </template>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Teléfono</label>
+                <input v-model="formData.phone" type="text" class="form-control" id="phone">
+                <template v-if="errors.phone.length > 0">
+                  <b :key="e" v-for="e in errors.phone" class="text-danger">
+                      {{ e }}
+                  </b>
+              </template>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
+            <button type="button" class="btn btn-primary" @click="editAssistant">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <!-- Tabla de asistentes -->
   <div class="row">
     <div class="col-md-12">
@@ -90,7 +155,7 @@
                   <td>{{ row.email }}</td>
                   <td>{{ row.phone }}</td>
                   <td>
-                    <button class="btn btn-primary m-1" type="button">Editar</button>
+                    <button class="btn btn-primary m-1" type="button" @click="viewAssistant(row)">Editar</button>
                     <button class="btn btn-danger m-1" type="button">Eliminar</button>
                   </td>
                 </tr>
@@ -109,6 +174,8 @@ import { useApi } from '../composables/use-api';
 import Swal from 'sweetalert2';
 
 const showModal = ref(false); // Controla la visibilidad del modal
+const showModalEdit = ref(false); // Controla la visibilidad del modal
+
 const tableData = ref([]);
 
 const formData = ref({
@@ -145,12 +212,16 @@ const resetFormData = () => {
     email: '',
     phone: ''
   }
+  errorsClear();
+  showModal.value = false;
+  showModalEdit.value = false;
 }
 
 const dataTableApi = async () => {
   try {
     const data = await useApi('assistant');
     tableData.value = data.map((item) => ({
+      id: item.id,
       name: item.assistants,
       birthdate: item.birthdate,
       email: item.email,
@@ -209,6 +280,28 @@ const saveAssistant = async () => {
 
   dataTableApi();
 }
+
+const viewAssistant = async (user) => {
+  try {
+    const response = await useApi("assistant/" + user.id);
+
+    if (response.message === "Assistant found") {
+      formData.value = {
+        first_name: response.data.first_name,
+        last_name: response.data.last_name,
+        birthdate: response.data.birthdate,
+        email: response.data.email,
+        phone: response.data.phone
+      };
+      showModalEdit.value = true; // Abre el modal de edición
+    } else {
+      console.log("Asistente no encontrado.");
+    }
+  } catch (error) {
+    console.error("Error al obtener los datos del asistente:", error);
+  }
+};
+
 
 onMounted(dataTableApi);
 </script>
