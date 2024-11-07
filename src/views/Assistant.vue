@@ -171,7 +171,10 @@
 <script setup>
 import { onMounted, ref, nextTick } from 'vue';
 import { useApi } from '../composables/use-api';
+import { useMeta } from '../composables/use-meta';
 import Swal from 'sweetalert2';
+
+useMeta({ title: 'Assistant' });
 
 const showModal = ref(false); // Controla la visibilidad del modal
 const showModalEdit = ref(false); // Controla la visibilidad del modal
