@@ -125,7 +125,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
+            <button ref="discardButton" type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
             <button type="button" class="btn btn-primary" @click="editAssistant">Guardar</button>
           </div>
         </div>
@@ -156,7 +156,7 @@
                   <td>{{ row.phone }}</td>
                   <td>
                     <button class="btn btn-primary m-1" type="button" @click="viewAssistant(row)">Editar</button>
-                    <button class="btn btn-danger m-1" type="button">Eliminar</button>
+                    <button class="btn btn-danger m-1" type="button" @click="deleteAssistant(row)">Eliminar</button>
                   </td>
                 </tr>
               </tbody>
@@ -220,6 +220,8 @@ const resetFormData = () => {
   showModalEdit.value = false;
 }
 
+const discardButton = ref(null);
+
 const dataTableApi = async () => {
   try {
     const data = await useApi('assistant');
@@ -239,7 +241,6 @@ const dataTableApi = async () => {
   }
 };
 
-// Función para guardar el asistente
 const saveAssistant = async () => {
   errorsClear()
 
@@ -279,16 +280,21 @@ const saveAssistant = async () => {
     })
   }
 
-  showModal.value = false; // Cierra el modal
+  $('#sampleTable').DataTable().destroy();
 
-  dataTableApi();
+  await dataTableApi()
+  showModal.value = false; 
+
 }
+
+let id; 
 
 const viewAssistant = async (user) => {
   try {
     const response = await useApi("assistant/" + user.id);
 
     if (response.message === "Assistant found") {
+      id = user.id;
       formData.value = {
         first_name: response.data.first_name,
         last_name: response.data.last_name,
@@ -305,6 +311,73 @@ const viewAssistant = async (user) => {
   }
 };
 
+const editAssistant = async () => {
+  try {
+    const dataUpdated = {
+        first_name: formData.value.first_name,
+        last_name: formData.value.last_name,
+        birthdate: formData.value.birthdate,
+        email: formData.value.email,
+        phone: formData.value.phone
+    }
+
+    await useApi("assistant/" +id, "PUT", dataUpdated)
+
+    Swal.fire({
+      title: 'Exíto',
+      text: 'Asistente actualizado con éxito',
+      icon: 'success',
+      confirmButtonText: '¡Entendido!'
+    }).then(() => {
+        if(discardButton.value) {
+          discardButton.value.click()
+        }
+        resetFormData()
+    })
+  } catch (error) {
+    console.log("Error al actualizar el asistente:", error)
+  }
+  dataTableApi()
+}
+
+const deleteAssistant = async (user) => {
+  const result = await Swal.fire({
+    title: '¿Estás seguro de eliminar el asistente?',
+    text: 'No podrás recuperar los datos una vez eliminado.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminar',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await useApi("assistant/" + user.id, "DELETE");
+
+      tableData.value = tableData.value.filter((d) => d.id !== user.id);
+
+      Swal.fire({
+        title: 'Eliminado',
+        text: 'Asistente eliminado con éxito',
+        icon: 'success',
+        confirmButtonText: '¡Entendido!',
+      });
+
+      // Vuelve a cargar la tabla (opcional si se usa `tableData.value` directamente)
+      dataTableApi();
+    } catch (error) {
+      console.error("Error al eliminar el asistente:", error);
+
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo eliminar el asistente. Inténtalo de nuevo.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+    }
+  }
+};
 
 onMounted(dataTableApi);
 </script>
