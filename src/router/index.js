@@ -3,6 +3,8 @@ import Dashboard from '../views/Dashboard.vue';
 import Login from '../views/auth/Login.vue'
 import Register from '../views/auth/Register.vue';
 import Assistant from '../views/Assistant.vue';
+import Category from '../views/Category.vue';
+import Event from '../views/Event.vue';
 
 const routes = [
   { 
@@ -13,6 +15,14 @@ const routes = [
   { path: '/assistant',
     name: 'Assistant',
     component: Assistant 
+  },
+  { path: '/category',
+    name: 'Category',
+    component: Category 
+  },
+  { path: '/event',
+    name: 'Event',
+    component: Event 
   },
   {
     path: '/login',
