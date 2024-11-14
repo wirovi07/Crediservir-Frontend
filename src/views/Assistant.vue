@@ -67,70 +67,70 @@
     </div>
   </div>
 
-    <!-- Modal para editar los datos -->
-    <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Asistente</h5>
-            <button type="button" class="btn-close" @click="showModalEdit = false"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="first_name" class="form-label">Nombres</label>
-                <input v-model="formData.first_name" type="text" class="form-control" id="first_name">
-                <template v-if="errors.first_name.length > 0">
-                  <b :key="e" v-for="e in errors.first_name" class="text-danger">
-                      {{ e }}
-                  </b>
-              </template>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="last_name" class="form-label">Apellidos</label>
-                <input v-model="formData.last_name" type="text" class="form-control" id="last_name">
-                <template v-if="errors.last_name.length > 0">
-                  <b :key="e" v-for="e in errors.last_name" class="text-danger">
-                      {{ e }}
-                  </b>
-              </template>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="birthdate" class="form-label">Fecha de Nacimiento</label>
-                <input v-model="formData.birthdate" type="date" class="form-control" id="birthdate">
-                <template v-if="errors.birthdate.length > 0">
-                  <b :key="e" v-for="e in errors.birthdate" class="text-danger">
-                      {{ e }}
-                  </b>
-              </template>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="email" class="form-label">Correo</label>
-                <input v-model="formData.email" type="email" class="form-control" id="email">
-                <template v-if="errors.email.length > 0">
-                  <b :key="e" v-for="e in errors.email" class="text-danger">
-                      {{ e }}
-                  </b>
-              </template>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="phone" class="form-label">Teléfono</label>
-                <input v-model="formData.phone" type="text" class="form-control" id="phone">
-                <template v-if="errors.phone.length > 0">
-                  <b :key="e" v-for="e in errors.phone" class="text-danger">
-                      {{ e }}
-                  </b>
-              </template>
-              </div>
+  <!-- Modal para editar los datos -->
+  <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Asistente</h5>
+          <button type="button" class="btn-close" @click="showModalEdit = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="first_name" class="form-label">Nombres</label>
+              <input v-model="formData.first_name" type="text" class="form-control" id="first_name">
+              <template v-if="errors.first_name.length > 0">
+                <b :key="e" v-for="e in errors.first_name" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="last_name" class="form-label">Apellidos</label>
+              <input v-model="formData.last_name" type="text" class="form-control" id="last_name">
+              <template v-if="errors.last_name.length > 0">
+                <b :key="e" v-for="e in errors.last_name" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="birthdate" class="form-label">Fecha de Nacimiento</label>
+              <input v-model="formData.birthdate" type="date" class="form-control" id="birthdate">
+              <template v-if="errors.birthdate.length > 0">
+                <b :key="e" v-for="e in errors.birthdate" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Correo</label>
+              <input v-model="formData.email" type="email" class="form-control" id="email">
+              <template v-if="errors.email.length > 0">
+                <b :key="e" v-for="e in errors.email" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="phone" class="form-label">Teléfono</label>
+              <input v-model="formData.phone" type="text" class="form-control" id="phone">
+              <template v-if="errors.phone.length > 0">
+                <b :key="e" v-for="e in errors.phone" class="text-danger">
+                    {{ e }}
+                </b>
+            </template>
             </div>
           </div>
-          <div class="modal-footer">
-            <button ref="discardButton" type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
-            <button type="button" class="btn btn-primary" @click="editAssistant">Guardar</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button ref="discardButton" type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
+          <button type="button" class="btn btn-primary" @click="editAssistant">Guardar</button>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- Tabla de asistentes -->
   <div class="row">
@@ -253,7 +253,6 @@ const saveAssistant = async () => {
       errors.value[elemento] = "Este campo es obligatorio"
     }
   })
-
   if(has_error){
     return
   }
@@ -324,7 +323,7 @@ const editAssistant = async () => {
     await useApi("assistant/" +id, "PUT", dataUpdated)
 
     Swal.fire({
-      title: 'Exíto',
+      title: '¡Exito!',
       text: 'Asistente actualizado con éxito',
       icon: 'success',
       confirmButtonText: '¡Entendido!'
@@ -348,17 +347,17 @@ const deleteAssistant = async (user) => {
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Sí, eliminar',
+    confirmButtonText: 'Sí, eliminala',
   });
 
   if (result.isConfirmed) {
     try {
-      await useApi("assistant/" + user.id, "DELETE");
+      await useApi("assistant/" +user.id, "DELETE");
 
       tableData.value = tableData.value.filter((d) => d.id !== user.id);
 
       Swal.fire({
-        title: 'Eliminado',
+        title: '¡Eliminado!',
         text: 'Asistente eliminado con éxito',
         icon: 'success',
         confirmButtonText: '¡Entendido!',
