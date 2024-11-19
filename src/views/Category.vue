@@ -1,81 +1,81 @@
 <template>
   <button class="btn btn-primary my-3" @click="showModal = true">Agregar Categoria</button>
   
-    <!-- Modal para ingresar los datos -->
-    <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Agregar Nueva Categoria</h5>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="name" class="form-label">Categoria</label>
-                <input v-model="formData.name" type="text" class="form-control" id="name">
-                <template v-if="errors.name.length > 0">
-                  <b :key="e" v-for="e in errors.name" class="text-danger">
-                      {{ e }}
-                  </b>
+  <!-- Modal para agregar un nuevo registro -->
+  <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Nueva Categoria</h5>
+          <button type="button" class="btn-close" @click="showModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name" class="form-label">Categoria</label>
+              <input v-model="formData.name" type="text" class="form-control" id="name">
+              <template v-if="errors.name.length > 0">
+                <b :key="e" v-for="e in errors.name" class="text-danger">
+                  {{ e }}
+                </b>
               </template>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="description" class="form-label">Descripción</label>
-                <input v-model="formData.description" type="text" class="form-control" id="description">
-                <template v-if="errors.description.length > 0">
-                  <b :key="e" v-for="e in errors.description" class="text-danger">
-                      {{ e }}
-                  </b>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="description" class="form-label">Descripción</label>
+              <input v-model="formData.description" type="text" class="form-control" id="description">
+              <template v-if="errors.description.length > 0">
+                <b :key="e" v-for="e in errors.description" class="text-danger">
+                  {{ e }}
+                </b>
               </template>
-              </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
-            <button type="button" class="btn btn-primary" @click="saveCategory">Guardar</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
+          <button type="button" class="btn btn-primary" @click="saveCategory">Guardar</button>
         </div>
       </div>
     </div>
-  
-    <!-- Modal para editar los datos -->
-    <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Categoria</h5>
-            <button type="button" class="btn-close" @click="showModalEdit = false"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="name" class="form-label">Categoria</label>
-                <input v-model="formData.name" type="text" class="form-control" id="name">
-                <template v-if="errors.name.length > 0">
-                  <b :key="e" v-for="e in errors.name" class="text-danger">
-                      {{ e }}
-                  </b>
+  </div>
+
+  <!-- Modal para editar los datos -->
+  <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Categoria</h5>
+          <button type="button" class="btn-close" @click="showModalEdit = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name" class="form-label">Categoria</label>
+              <input v-model="formData.name" type="text" class="form-control" id="name">
+              <template v-if="errors.name.length > 0">
+                <b :key="e" v-for="e in errors.name" class="text-danger">
+                  {{ e }}
+                </b>
               </template>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="description" class="form-label">Apellidos</label>
-                <input v-model="formData.description" type="text" class="form-control" id="description">
-                <template v-if="errors.description.length > 0">
-                  <b :key="e" v-for="e in errors.description" class="text-danger">
-                      {{ e }}
-                  </b>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="description" class="form-label">Apellidos</label>
+              <input v-model="formData.description" type="text" class="form-control" id="description">
+              <template v-if="errors.description.length > 0">
+                <b :key="e" v-for="e in errors.description" class="text-danger">
+                  {{ e }}
+                </b>
               </template>
-              </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button ref="discardButton" type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
-            <button type="button" class="btn btn-primary" @click="editCategory">Guardar</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button ref="discardButton" type="button" class="btn btn-secondary" @click="resetFormData">Cerrar</button>
+          <button type="button" class="btn btn-primary" @click="editCategory">Guardar</button>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- Tabla de Categorias -->
   <div class="row">
@@ -94,7 +94,7 @@
               <tbody>
                 <tr v-for="(row, index) in tableData" :key="index">
                   <td>{{ row.name }}</td>
-                  <td>{{ row.description}}</td>
+                  <td>{{ row.description }}</td>
                   <td>
                     <button class="btn btn-primary m-1" type="button" @click="viewCategory(row)">Editar</button>
                     <button class="btn btn-danger m-1" type="button" @click="deleteCategory(row)">Eliminar</button>
@@ -142,7 +142,8 @@ const errorsClear = () => {
 
 const resetFormData = () => {
   formData.value = {
-    name: ''
+    name: '',
+    description: '',
   }
   errorsClear()
   showModal.value = false;
@@ -180,7 +181,7 @@ const saveCategory = async () => {
       errors.value[elemento] = "Este campo es obligatorio"
     }
   })
-  if(has_error){
+  if (has_error) {
     return
   }
 
@@ -192,7 +193,7 @@ const saveCategory = async () => {
       icon: 'success',
       confirmButtonText: '¡Entendido!'
     }).then(() => {
-      if(discardButton.value){
+      if (discardButton.value) {
         discardButton.value.click()
       }
       resetFormData()
@@ -216,9 +217,9 @@ let id;
 
 const viewCategory = async (user) => {
   try {
-    const response = await useApi("category/" +user.id)
+    const response = await useApi("category/" + user.id)
 
-    if(response.message === "Category found"){
+    if (response.message === "Category found") {
       id = user.id
       formData.value = {
         "name": response.data.name,
@@ -240,7 +241,7 @@ const editCategory = async () => {
       description: formData.value.description
     }
 
-    await useApi("category/" +id, "PUT", dataUpdated)
+    await useApi("category/" + id, "PUT", dataUpdated)
 
     Swal.fire({
       title: '¡Exito!',
@@ -248,7 +249,7 @@ const editCategory = async () => {
       icon: 'success',
       confirmButtonText: '¡Entendido!'
     }).then(() => {
-      if(discardButton.value){
+      if (discardButton.value) {
         discardButton.value.click()
       }
       resetFormData()
@@ -259,7 +260,7 @@ const editCategory = async () => {
   dataTableApi()
 }
 
-const deleteCategory = async(user) => {
+const deleteCategory = async (user) => {
   const result = await Swal.fire({
     title: '¿Estás seguro de eliminar la categoria?',
     text: 'No podrás recuperar los datos una vez eliminado.',
@@ -270,9 +271,9 @@ const deleteCategory = async(user) => {
     confirmButtonText: '¡Sí, eliminarla!',
   })
 
-  if(result.isConfirmed) {
+  if (result.isConfirmed) {
     try {
-      await useApi("category/" +user.id, "DELETE" )
+      await useApi("category/" + user.id, "DELETE")
 
       tableData.value = tableData.value.filter((d) => d.id !== user.id)
 
