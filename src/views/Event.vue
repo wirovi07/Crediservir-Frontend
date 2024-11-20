@@ -8,7 +8,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Agregar Nuevo Evento</h5>
-          <button type="button" class="btn-close" @click="showModal = false"></button>
+          <button type="button" class="btn-close" @click="resetFormData"></button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -28,16 +28,6 @@
               <input v-model="formData.description" type="text" class="form-control" id="description">
               <template v-if="errors.description.length > 0">
                 <b :key="e" v-for="e in errors.description" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Fecha -->
-            <div class="col-md-6 mb-3">
-              <label for="date" class="form-label">Fecha</label>
-              <input v-model="formData.date" type="date" class="form-control" id="date">
-              <template v-if="errors.date.length > 0">
-                <b :key="e" v-for="e in errors.date" class="text-danger">
                   {{ e }}
                 </b>
               </template>
@@ -128,7 +118,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Editar Evento</h5>
-          <button type="button" class="btn-close" @click="showModalEdit = false"></button>
+          <button type="button" class="btn-close" @click="resetFormData"></button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -148,16 +138,6 @@
               <input v-model="formData.description" type="text" class="form-control" id="description">
               <template v-if="errors.description.length > 0">
                 <b :key="e" v-for="e in errors.description" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Fecha -->
-            <div class="col-md-6 mb-3">
-              <label for="date" class="form-label">Fecha</label>
-              <input v-model="formData.date" type="date" class="form-control" id="date">
-              <template v-if="errors.date.length > 0">
-                <b :key="e" v-for="e in errors.date" class="text-danger">
                   {{ e }}
                 </b>
               </template>
@@ -185,7 +165,7 @@
             <!-- Espacio disponible -->
             <div class="col-md-6 mb-3">
               <label for="availabl_space" class="form-label">Espacio Disponible</label>
-              <input v-model="formData.availabl_space" type="number" class="form-control" id="availabl_space">
+              <input v-model="formData.availabl_space " type="number" class="form-control" id="availabl_space">
               <template v-if="errors.availabl_space.length > 0">
                 <b :key="e" v-for="e in errors.availabl_space" class="text-danger">
                   {{ e }}
@@ -257,17 +237,16 @@
                   <th>Lugar</th>
                   <th>Cupo Disponible</th>
                   <th>Tipo[Gratiuto, Pago]</th>
-                  <th>Categoria</th>
                   <th>Valor</th>
                   <th>Fecha de Apertura</th>
                   <th>Fecha de Cierre</th>
+                  <th>Opciones</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(row, index) in tableData" :key="index">
                   <td>{{ row.title }}</td>
                   <td>{{ row.description }}</td>
-                  <td>{{ row.date }}</td>
                   <td>{{ row.hour }}</td>
                   <td>{{ row.place }}</td>
                   <td>{{ row.availabl_space }}</td>
@@ -306,7 +285,6 @@ const tableData = ref([])
 const formData = ref({
   title: '',
   description: '',
-  date: '',
   hour: '',
   place: '',
   availabl_space: '',
@@ -319,7 +297,6 @@ const formData = ref({
 const errors = ref({
   title: [],
   description: [],
-  date: [],
   hour: [],
   place: [],
   availabl_space: [],
@@ -333,7 +310,6 @@ const errorsClear = () => {
   errors.value = {
     title: [],
     description: [],
-    date: [],
     hour: [],
     place: [],
     availabl_space: [],
@@ -348,7 +324,6 @@ const resetFormData = () => {
   formData.value = {
     title: '',
     description: '',
-    date: '',
     hour: '',
     place: '',
     availabl_space: '',
@@ -366,12 +341,11 @@ const discardButton = ref(null)
 
 const dataTableApi = async () => {
   try {
-    const data = await useApi('Event')
+    const data = await useApi('event')
     tableData.value = data.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,
-      date: item.date,
       hour: item.hour,
       place: item.place,
       availabl_space: item.availabl_space,
@@ -433,9 +407,14 @@ const saveEvent = async () => {
   showModal.value = false
 }
 
+let id;
+
 const viewEvent = async (user) => {
+  console.log(user);
   try {
     const response = await useApi("event/" + user.id)
+
+    console.log(response)
 
     if (response.message === "Event found") {
       id = user.id
@@ -445,7 +424,7 @@ const viewEvent = async (user) => {
         "date": response.data.date,
         "hour": response.data.hour,
         "place": response.data.place,
-        "availabl_space,": response.data.availabl_space,
+        "availabl_space": response.data.availabl_space,
         "type": response.data.type,
         "base_value": response.data.base_value,
         "opening_date": response.data.opening_date,

@@ -7,7 +7,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Agregar Nueva Categoria</h5>
-          <button type="button" class="btn-close" @click="showModal = false"></button>
+          <button type="button" class="btn-close" @click="resetFormData"></button>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -45,7 +45,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Editar Categoria</h5>
-          <button type="button" class="btn-close" @click="showModalEdit = false"></button>
+          <button type="button" class="btn-close" @click="resetFormData"></button>
         </div>
         <div class="modal-body">
           <div class="row">
