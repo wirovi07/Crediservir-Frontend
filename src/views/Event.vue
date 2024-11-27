@@ -22,6 +22,21 @@
                 </b>
               </template>
             </div>
+            <!-- Categoria -->
+            <div class="col-md-6 mb-3">
+              <label for="category" class="form-label">Categoría</label>
+              <select v-model="formData.category_id" class="form-select" id="category">
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option :value="category.id" :key="category.id" v-for="category in categoriesList">
+                  {{ category.name }}
+                </option>
+              </select>
+              <template v-if="errors.category_id.length > 0">
+                <b :key="e" v-for="e in errors.category_id" class="text-danger">
+                  {{ e }}
+                </b>
+              </template>
+            </div>
             <!-- Descripción -->
             <div class="col-md-6 mb-3">
               <label for="description" class="form-label">Descripción</label>
@@ -65,7 +80,11 @@
             <!-- Tipo -->
             <div class="col-md-6 mb-3">
               <label for="type" class="form-label">Tipo</label>
-              <input v-model="formData.type" type="text" class="form-control" id="type">
+              <select v-model="formData.type" class="form-control" id="type">
+                <option value="" disabled>Seleccione un tipo</option>
+                <option value="gratuito">Gratuito</option>
+                <option value="pago">Pago</option>
+              </select>
               <template v-if="errors.type.length > 0">
                 <b :key="e" v-for="e in errors.type" class="text-danger">
                   {{ e }}
@@ -132,6 +151,21 @@
                 </b>
               </template>
             </div>
+            <!-- Categoria -->
+            <div class="col-md-6 mb-3">
+              <label for="category" class="form-label">Categoría</label>
+              <select v-model="formData.category_id" class="form-select" id="category">
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option :value="category.id" :key="category.id" v-for="category in categoriesList">
+                  {{ category.name }}
+                </option>
+              </select>
+              <template v-if="errors.category_id.length > 0">
+                <b :key="e" v-for="e in errors.category_id" class="text-danger">
+                  {{ e }}
+                </b>
+              </template>
+            </div>
             <!-- Descripción -->
             <div class="col-md-6 mb-3">
               <label for="description" class="form-label">Descripción</label>
@@ -165,7 +199,7 @@
             <!-- Espacio disponible -->
             <div class="col-md-6 mb-3">
               <label for="availabl_space" class="form-label">Espacio Disponible</label>
-              <input v-model="formData.availabl_space " type="number" class="form-control" id="availabl_space">
+              <input v-model="formData.availabl_space" type="number" class="form-control" id="availabl_space">
               <template v-if="errors.availabl_space.length > 0">
                 <b :key="e" v-for="e in errors.availabl_space" class="text-danger">
                   {{ e }}
@@ -175,7 +209,11 @@
             <!-- Tipo -->
             <div class="col-md-6 mb-3">
               <label for="type" class="form-label">Tipo</label>
-              <input v-model="formData.type" type="text" class="form-control" id="type">
+              <select v-model="formData.type" class="form-control" id="type">
+                <option value="" disabled>Seleccione un tipo</option>
+                <option value="gratuito">Gratuito</option>
+                <option value="pago">Pago</option>
+              </select>
               <template v-if="errors.type.length > 0">
                 <b :key="e" v-for="e in errors.type" class="text-danger">
                   {{ e }}
@@ -233,6 +271,7 @@
                 <tr>
                   <th>Titulo</th>
                   <th>Descripción</th>
+                  <th>Categoria</th>
                   <th>Hora</th>
                   <th>Lugar</th>
                   <th>Cupo Disponible</th>
@@ -247,6 +286,7 @@
                 <tr v-for="(row, index) in tableData" :key="index">
                   <td>{{ row.title }}</td>
                   <td>{{ row.description }}</td>
+                  <td>{{ row.category_name }}</td>
                   <td>{{ row.hour }}</td>
                   <td>{{ row.place }}</td>
                   <td>{{ row.availabl_space }}</td>
@@ -270,7 +310,7 @@
 
 <script setup>
 
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, ref, nextTick, onBeforeMount } from 'vue';
 import { useApi } from '../composables/use-api';
 import { useMeta } from '../composables/use-meta';
 import Swal from 'sweetalert2';
@@ -292,6 +332,7 @@ const formData = ref({
   base_value: '',
   opening_date: '',
   closing_date: '',
+  category_id: '',
 })
 
 const errors = ref({
@@ -304,6 +345,7 @@ const errors = ref({
   base_value: [],
   opening_date: [],
   closing_date: [],
+  category_id: [],
 })
 
 const errorsClear = () => {
@@ -317,6 +359,7 @@ const errorsClear = () => {
     base_value: [],
     opening_date: [],
     closing_date: [],
+    category_id: [],
   }
 }
 
@@ -331,6 +374,7 @@ const resetFormData = () => {
     base_value: '',
     opening_date: '',
     closing_date: '',
+    category_id: '',
   }
   errorsClear()
   showModal.value = false
@@ -350,6 +394,7 @@ const dataTableApi = async () => {
       place: item.place,
       availabl_space: item.availabl_space,
       type: item.type,
+      category_name: item.category_name,
       base_value: item.base_value,
       opening_date: item.opening_date,
       closing_date: item.closing_date
@@ -364,6 +409,7 @@ const dataTableApi = async () => {
 }
 
 const saveEvent = async () => {
+  console.log("Lo que quiero ver es esto: ",formData.value)
   errorsClear()
 
   let has_error = false
@@ -380,7 +426,7 @@ const saveEvent = async () => {
   }
 
   try {
-    await useApi("event", "POST", formData.value)
+    await useApi("eventcategory", "POST", formData.value)
     Swal.fire({
       title: 'Exito',
       text: 'Evento creado con éxito',
@@ -410,13 +456,12 @@ const saveEvent = async () => {
 let id;
 
 const viewEvent = async (user) => {
-  console.log(user);
   try {
-    const response = await useApi("event/" + user.id)
+    const response = await useApi("eventcategory/" + user.id)
 
     console.log(response)
 
-    if (response.message === "Event found") {
+    if (response.message === "Event Category found") {
       id = user.id
       formData.value = {
         "title": response.data.title,
@@ -428,8 +473,11 @@ const viewEvent = async (user) => {
         "type": response.data.type,
         "base_value": response.data.base_value,
         "opening_date": response.data.opening_date,
-        "closing_date": response.data.closing_date
+        "closing_date": response.data.closing_date,
+        "category_id": response.data.category_name
       }
+
+      console.log("Las valores de formData: ", formData.value)
       showModalEdit.value = true
     } else {
       console.log("Evento no encontrado")
@@ -511,6 +559,22 @@ const deleteEvent = async (user) => {
 }
 
 onMounted(dataTableApi);
+
+onBeforeMount(() => {
+  showCategories();
+});
+
+
+const categoriesList = ref([])
+
+const showCategories = async () => {
+  try {
+    const response = await useApi("eventnamecategory")
+    categoriesList.value = response.data
+  } catch (error) {
+    console.log('Error al obtener las categorias')
+  }
+}
 
 </script>
 
