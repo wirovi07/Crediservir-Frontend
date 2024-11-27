@@ -156,7 +156,7 @@
               <label for="category" class="form-label">Categoría</label>
               <select v-model="formData.category_id" class="form-select" id="category">
                 <option value="" disabled selected>Seleccione una categoría</option>
-                <option :value="category.id" :key="category.id" v-for="category in categoriesList">
+                <option v-for="category in categoriesList" :key="category.id" :value="category.id"  >
                   {{ category.name }}
                 </option>
               </select>
@@ -466,7 +466,6 @@ const viewEvent = async (user) => {
       formData.value = {
         "title": response.data.title,
         "description": response.data.description,
-        "date": response.data.date,
         "hour": response.data.hour,
         "place": response.data.place,
         "availabl_space": response.data.availabl_space,
@@ -474,7 +473,7 @@ const viewEvent = async (user) => {
         "base_value": response.data.base_value,
         "opening_date": response.data.opening_date,
         "closing_date": response.data.closing_date,
-        "category_id": response.data.category_name
+        "category_id": response.data.category_id
       }
 
       console.log("Las valores de formData: ", formData.value)
