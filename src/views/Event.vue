@@ -498,10 +498,11 @@ const editEvent = async () => {
       "type": formData.value.type,
       "base_value": formData.value.base_value,
       "opening_date": formData.value.opening_date,
-      "closing_date": formData.value.closing_date
+      "closing_date": formData.value.closing_date,
+      "category_id": formData.value.category_id
     }
 
-    await useApi("event/" + id, "PUT", dataUpdated)
+    await useApi("eventcategory/" + id, "PUT", dataUpdated)
 
     Swal.fire({
       title: "Exito",
@@ -533,7 +534,7 @@ const deleteEvent = async (user) => {
 
   if (result.isConfirmed) {
     try {
-      await useApi("event/" + user.id, "DELETE")
+      await useApi("eventcategory/" + user.id, "DELETE")
 
       tableData.value = tableData.value.filter((d) => d.id !== user.id)
 
