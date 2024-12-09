@@ -5,6 +5,7 @@ import Register from '../views/auth/Register.vue';
 import Assistant from '../views/Assistant.vue';
 import Category from '../views/Category.vue';
 import Event from '../views/Event.vue';
+import Registration from '../views/Registration.vue';
 
 const routes = [
   { 
@@ -23,6 +24,10 @@ const routes = [
   { path: '/event',
     name: 'Event',
     component: Event 
+  },
+  { path: '/registration',
+    name: 'Registration',
+    component: Registration
   },
   {
     path: '/login',

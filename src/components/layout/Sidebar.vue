@@ -27,6 +27,7 @@ export default {
         { label: 'Assistant', path: '/assistant', icon: 'bi bi-person-check-fill' },
         { label: 'Category', path: '/category', icon: 'bi bi-bookmarks-fill' },
         { label: 'Event', path: '/event', icon: 'bi bi-calendar2-event-fill' },
+        { label: 'Registration', path: '/registration', icon: 'bi bi-calendar2-event-fill' },
       ]
     }
   }
