@@ -12,111 +12,82 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <!-- Título -->
+            <!-- Tipo de Entrada -->
             <div class="col-md-6 mb-3">
-              <label for="title" class="form-label">Título</label>
-              <input v-model="formData.title" type="text" class="form-control" id="title">
-              <template v-if="errors.title.length > 0">
-                <b :key="e" v-for="e in errors.title" class="text-danger">
+              <label for="type_input" class="form-label">Tipo de Entrada</label>
+              <select v-model="formData.type_input" class="form-select" id="type_input">
+                <option style="margin: 1px" value="" disabled selected>Tipo de Entrada</option>
+                <option value="Gratis">Gratis</option>
+                <option value="General">General</option>
+                <option value="VIP">VIP</option>
+              </select>
+              <template v-if="errors.type_input.length > 0">
+                <b :key="e" v-for="e in errors.type_input" class="text-danger">
                   {{ e }}
                 </b>
               </template>
             </div>
-            <!-- Categoria -->
+            <!-- Valor Calculado -->
             <div class="col-md-6 mb-3">
-              <label for="category" class="form-label">Categoría</label>
-              <select v-model="formData.category_id" class="form-select" id="category">
-                <option value="" disabled selected>Seleccione una categoría</option>
-                <option :value="category.id" :key="category.id" v-for="category in categoriesList">
-                  {{ category.name }}
+              <label for="calculated_value" class="form-label">Valor Calculado</label>
+              <input v-model="formData.calculated_value" type="text" class="form-control" id="calculated_value">
+              <template v-if="errors.calculated_value.length > 0">
+                <b :key="e" v-for="e in errors.calculated_value" class="text-danger">
+                  {{ e }}
+                </b>
+              </template>
+            </div>
+            <!-- Fecha de Compra -->
+            <div class="col-md-6 mb-3">
+              <label for="purchase_date" class="form-label">Fecha</label>
+              <input v-model="formData.purchase_date" type="time" class="form-control" id="purchase_date">
+              <template v-if="errors.purchase_date.length > 0">
+                <b :key="e" v-for="e in errors.purchase_date" class="text-danger">
+                  {{ e }}
+                </b>
+              </template>
+            </div>
+            <!-- Codigo Promocional -->
+            <div class="col-md-6 mb-3">
+              <label for="code" class="form-label">Código Promocional</label>
+              <select v-model="formData.code_promotional" class="form-select" id="code">
+                <option value="" disabled selected>Seleccione un código</option>
+                <option v-for="code in codePromotionalList" :value="code.id" :key="code.id">
+                  {{ code.code }}
                 </option>
               </select>
-              <template v-if="errors.category_id.length > 0">
-                <b :key="e" v-for="e in errors.category_id" class="text-danger">
+              <template v-if="errors.code_promotional.length > 0">
+                <b v-for="e in errors.code_promotional" :key="e" class="text-danger">
                   {{ e }}
                 </b>
               </template>
             </div>
-            <!-- Descripción -->
+            <!-- Asistente-->
             <div class="col-md-6 mb-3">
-              <label for="description" class="form-label">Descripción</label>
-              <input v-model="formData.description" type="text" class="form-control" id="description">
-              <template v-if="errors.description.length > 0">
-                <b :key="e" v-for="e in errors.description" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Hora -->
-            <div class="col-md-6 mb-3">
-              <label for="hour" class="form-label">Hora</label>
-              <input v-model="formData.hour" type="time" class="form-control" id="hour">
-              <template v-if="errors.hour.length > 0">
-                <b :key="e" v-for="e in errors.hour" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Lugar -->
-            <div class="col-md-6 mb-3">
-              <label for="place" class="form-label">Lugar</label>
-              <input v-model="formData.place" type="text" class="form-control" id="place">
-              <template v-if="errors.place.length > 0">
-                <b :key="e" v-for="e in errors.place" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Espacio disponible -->
-            <div class="col-md-6 mb-3">
-              <label for="availabl_space" class="form-label">Espacio Disponible</label>
-              <input v-model="formData.availabl_space" type="number" class="form-control" id="availabl_space">
-              <template v-if="errors.availabl_space.length > 0">
-                <b :key="e" v-for="e in errors.availabl_space" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Tipo -->
-            <div class="col-md-6 mb-3">
-              <label for="type" class="form-label">Tipo</label>
-              <select v-model="formData.type" class="form-control" id="type">
-                <option value="" disabled>Seleccione un tipo</option>
-                <option value="gratuito">Gratuito</option>
-                <option value="pago">Pago</option>
+              <label for="assitant_id" class="form-label">Asistente</label>
+              <select v-model="formData.assitant_id" class="form-select" id="assitant_id">
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option :value="assistant.id" :key="assistant.id" v-for="assistant in assistantList">
+                  {{ assistant.assistants }}
+                </option>
               </select>
-              <template v-if="errors.type.length > 0">
-                <b :key="e" v-for="e in errors.type" class="text-danger">
+              <template v-if="errors.assitant_id.length > 0">
+                <b :key="e" v-for="e in errors.assitant_id" class="text-danger">
                   {{ e }}
                 </b>
               </template>
             </div>
-            <!-- Valor Base -->
+            <!-- Evento-->
             <div class="col-md-6 mb-3">
-              <label for="base_value" class="form-label">Valor Base</label>
-              <input v-model="formData.base_value" type="number" class="form-control" id="base_value">
-              <template v-if="errors.base_value.length > 0">
-                <b :key="e" v-for="e in errors.base_value" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Fecha de Apertura -->
-            <div class="col-md-6 mb-3">
-              <label for="opening_date" class="form-label">Fecha de Apertura</label>
-              <input v-model="formData.opening_date" type="date" class="form-control" id="opening_date">
-              <template v-if="errors.opening_date.length > 0">
-                <b :key="e" v-for="e in errors.opening_date" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
-            <!-- Fecha de Cierre -->
-            <div class="col-md-6 mb-3">
-              <label for="closing_date" class="form-label">Fecha de Cierre</label>
-              <input v-model="formData.closing_date" type="date" class="form-control" id="closing_date">
-              <template v-if="errors.closing_date.length > 0">
-                <b :key="e" v-for="e in errors.closing_date" class="text-danger">
+              <label for="event_id" class="form-label">Evento</label>
+              <select v-model="formData.event_id" class="form-select" id="event_id">
+                <option value="" disabled selected>Seleccione Evento</option>
+                <option v-for="event in eventList" :value="event.id" :key="event.id" >
+                  {{ event.title }}
+                </option>
+              </select>
+              <template v-if="errors.event_id.length > 0">
+                <b :key="e" v-for="e in errors.event_id" class="text-danger">
                   {{ e }}
                 </b>
               </template>
@@ -130,6 +101,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Modal para editar un nuevo registro -->
   <div v-if="showModalEdit" class="modal fade show d-block" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
@@ -259,7 +231,6 @@
       </div>
     </div>
   </div>
-
   <!-- Tabla de eventos -->
   <div class="row">
     <div class="col-md-12">
@@ -270,10 +241,9 @@
               <thead>
                 <tr>
                   <th>Tipo de Entrada</th>
-                  <th>Valor</th>
+                  <th>Valor Calculado</th>
                   <th>Fecha de Compra</th>
                   <th>Codigo Promocional</th>
-                  <th>Lugar</th>
                   <th>Asistente</th>
                   <th>Evento</th>
                   <th>Opciones</th>
@@ -281,16 +251,12 @@
               </thead>
               <tbody>
                 <tr v-for="(row, index) in tableData" :key="index">
-                  <td>{{ row.title }}</td>
-                  <td>{{ row.description }}</td>
-                  <td>{{ row.category_name }}</td>
-                  <td>{{ row.hour }}</td>
-                  <td>{{ row.place }}</td>
-                  <td>{{ row.availabl_space }}</td>
-                  <td>{{ row.type }}</td>
-                  <td>{{ row.base_value }}</td>
-                  <td>{{ row.opening_date }}</td>
-                  <td>{{ row.closing_date }}</td>
+                  <td>{{ row.type_input }}</td>
+                  <td>{{ row.calculated_value }}</td>
+                  <td>{{ row.purchase_date }}</td>
+                  <td>{{ row.code_promotional }}</td>
+                  <td>{{ row.assitant_id }}</td>
+                  <td>{{ row.event_id }}</td>
                   <td>
                     <button class="btn btn-primary m-1" type="button" @click="viewEvent(row)">Editar</button>
                     <button class="btn btn-danger m-1" type="button" @click="deleteEvent(row)">Eliminar</button>
@@ -373,13 +339,12 @@ const dataTableApi = async () => {
     const data = await useApi('registration')
     tableData.value = data.map((item) => ({
       id: item.id,
-      type_input: item.title,
-      calculated_value: item.description,
-      purchase_date: item.hour,
-      code_promotional: item.place,
-      user_id: item.availabl_space,
-      assitant_id: item.type,
-      event_id: item.category_name,
+      type_input: item.type_input,
+      calculated_value: item.calculated_value,
+      purchase_date: item.purchase_date,
+      code_promotional: item.code_promotional,
+      assitant_id: item.assitant_id,
+      event_id: item.event_id,
     }))
 
     await nextTick()
@@ -543,18 +508,38 @@ const deleteEvent = async (user) => {
 onMounted(dataTableApi);
 
 onBeforeMount(() => {
-  showCategories();
+  showCodePromotion();
+  showEvent();
+  showAssistant();
 });
 
-
-const categoriesList = ref([])
-
-const showCategories = async () => {
+const codePromotionalList = ref([])
+const showCodePromotion = async () => {
   try {
-    const response = await useApi("eventnamecategory")
-    categoriesList.value = response.data
+    const response = await useApi("promotionalCodes")
+    codePromotionalList.value = response
   } catch (error) {
-    console.log('Error al obtener las categorias')
+    console.log('Error al obtener el codigo promocional')
+  }
+}
+
+const eventList = ref([])
+const showEvent = async () => {
+  try {
+    const response = await useApi("event")
+    eventList.value = response
+  } catch (error) {
+    console.log('Error al obtener el evento')
+  }
+}
+
+const assistantList = ref([])
+const showAssistant = async () => {
+  try {
+    const response = await useApi("assistant")
+    assistantList.value = response
+  } catch (error) {
+    console.log('Error al obtener el asistente')
   }
 }
 
