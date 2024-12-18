@@ -27,16 +27,6 @@
                 </b>
               </template>
             </div>
-            <!-- Valor Calculado -->
-            <div class="col-md-6 mb-3">
-              <label for="calculated_value" class="form-label">Valor Calculado</label>
-              <input v-model="formData.calculated_value" type="text" class="form-control" id="calculated_value">
-              <template v-if="errors.calculated_value.length > 0">
-                <b :key="e" v-for="e in errors.calculated_value" class="text-danger">
-                  {{ e }}
-                </b>
-              </template>
-            </div>
             <!-- Fecha de Compra -->
             <div class="col-md-6 mb-3">
               <label for="purchase_date" class="form-label">Fecha</label>
@@ -80,14 +70,26 @@
             <!-- Evento-->
             <div class="col-md-6 mb-3">
               <label for="event_id" class="form-label">Evento</label>
-              <select v-model="formData.event_id" class="form-select" id="event_id">
+              <select v-model="formData.event_id" class="form-select" id="event_id" :class="{'is-invalid': errors.event_id?.length > 0}" aria-describedby="event_id_error">
                 <option value="" disabled selected>Seleccione Evento</option>
                 <option v-for="event in eventList" :value="event.id" :key="event.id" >
                   {{ event.title }}
                 </option>
               </select>
-              <template v-if="errors.event_id.length > 0">
+              <template v-if="errors.event_id?.length > 0">
                 <b :key="e" v-for="e in errors.event_id" class="text-danger">
+                  {{ e }}
+                </b>
+              </template>
+            </div>
+            <!-- Valor Calculado -->
+            <div class="col-md-6 mb-3">
+              <label for="calculated_value" class="form-label">Valor Calculado</label>
+              <input v-model="formData.calculated_value" type="text" class="form-control" id="calculated_value" readonly
+              :class="{ 'is-invalid': errors.calculated_value?.length > 0 }"
+              aria-describedby="calculated_value_error">
+              <template v-if="errors.calculated_value.length > 0">
+                <b :key="e" v-for="e in errors.calculated_value" class="text-danger">
                   {{ e }}
                 </b>
               </template>
@@ -273,7 +275,7 @@
 
 <script setup>
 
-import { onMounted, ref, nextTick, onBeforeMount } from 'vue';
+import { onMounted, ref, nextTick, onBeforeMount, watch } from 'vue';
 import { useApi } from '../composables/use-api';
 import { useMeta } from '../composables/use-meta';
 import Swal from 'sweetalert2';
@@ -292,7 +294,7 @@ const formData = ref({
   code_promotional: '',
   user_id: '',
   assitant_id: '',
-  event_id: '',
+  event_id: null,
 })
 
 const errors = ref({
@@ -529,9 +531,23 @@ const showEvent = async () => {
     const response = await useApi("event")
     eventList.value = response
   } catch (error) {
-    console.log('Error al obtener el evento')
+    console.log('Error al obtener el evento:', error)
   }
 }
+
+watch(() => formData.value.event_id, (newValue) => {
+  const selectedEvent = eventList.value.find((event) => event.id === newValue);
+  if (selectedEvent) {
+    formData.value.calculated_value = selectedEvent.calculated_value; 
+    formData.value.calculated_value = new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0
+    }).format(selectedEvent.calculated_value); 
+  } else {
+    formData.value.calculated_value = null;
+  }
+});
 
 const assistantList = ref([])
 const showAssistant = async () => {
